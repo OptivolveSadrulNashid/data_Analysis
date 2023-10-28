@@ -1,13 +1,51 @@
 
+
 #library(tidyverse)
 #library(tidyr)
-#library(writexl)
+#cdlibrary(writexl)
 
 #loading energy_data
 energy_data <- read.csv("all_energy_consumption.csv", colClasses = rep("numeric", 25))
 view(energy_data)
 
 #select columns for usage_scenario  to explore energy consumption
+
+
+camara_off <- c("Attempts", "zoom_camara_off_total_power", "skype_camara_off_total_power",
+                "element_camara_off_total_power","rocket_camara_off_total_power")
+camara_off_all_apps <- energy_data[camara_off]
+#view(camara_off_all_apps)
+ggplot(camara_off_all_apps, aes(x = Attempts)) +
+  geom_line(aes(y = skype_camara_off_total_power, color = "skype_camara_off"), linetype = "solid") +
+  geom_line(aes(y = zoom_camara_off_total_power, color = "zoom_camara_off"), linetype = "solid") +
+  geom_line(aes(y = element_camara_off_total_power, color = "element_camara_off"), linetype = "solid") +
+  geom_line(aes(y = rocket_camara_off_total_power, color = "rocket_camara_off"), linetype = "solid") +
+  labs(
+    x = "Attempts",
+    y = "Camara OFF Energy Consumption (J)",
+    color = "Variable",
+    title = "Camara OFF energy consumption (J)"
+  )
+
+camara_on <- c("Attempts", "zoom_camara_on_total_power", "skype_camara_on_total_power",
+               "element_camara_on_total_power","rocket_camara_on_total_power")
+
+
+camara_on_all_apps <- energy_data[camara_on]
+#view(camara_on_all_apps)
+
+ggplot(camara_on_all_apps, aes(x = Attempts)) +
+  geom_line(aes(y = skype_camara_on_total_power, color = "skype_camara_on"), linetype = "solid") +
+  geom_line(aes(y = zoom_camara_on_total_power, color = "zoom_camara_on"), linetype = "solid") +
+  geom_line(aes(y = element_camara_on_total_power, color = "element_camara_on"), linetype = "solid") +
+  geom_line(aes(y = rocket_camara_on_total_power, color = "rocket_camara_on"), linetype = "solid") +
+  labs(
+    x = "Attempts",
+    y = "Camara ON Energy Consumption (J)",
+    color = "Variable",
+    title = "Camara ON energy consumption (J)"
+  )
+
 selected_columns_for_zoom <- c("Attempts", "zoom_zip_total_power", "zoom_message_total_power",
                                "zoom_image_total_power", "zoom_camara_on_total_power",
                                "zoom_pdf_total_power", "zoom_camara_off_total_power")
@@ -28,7 +66,6 @@ ggplot(zoom_table, aes(x = Attempts)) +
     title = "Zoom energy consumption",
     subtitle = "Energy consumption for all zoom usage_scenario (J)"  
   ) 
-
 
 selected_columns_for_skype <- c("Attempts", "skype_zip_total_power", "skype_message_total_power", 
                                 "skype_image_total_power", "skype_camara_on_total_power",
@@ -262,141 +299,88 @@ qqnorm(messages_distribution$energy_consumed,
 qqline(messages_distribution$energy_consumed)
 
 
-camara_on_zoom_distribution <-  all_energy_data %>%
-  filter(grepl("zoom_camara_on", usage_scenario ))  
+camara_distribution <-  all_energy_data %>%
+  filter(grepl("camara_on|camara_off", usage_scenario ))  
 
-ggplot(camara_on_zoom_distribution, aes(energy_consumed, color = usage_scenario))+
+ggplot(camara_distribution, aes(energy_consumed, color = usage_scenario))+
   geom_density()+
   labs(
-    title = "Zoom energy consumption",
-    subtitle = "Zoom Energy consumption with camera ON (J)"  
+    title = "All camera usage energy consumption",
+    subtitle = "energy consumption for all camera usage across measured applications (J)"  
   ) 
-qqnorm(camara_on_zoom_distribution$energy_consumed,
-       main = "camara_on_zoom_distribution energy Consumed",
+qqnorm(camara_distribution$energy_consumed,
+       main = "camera distribution energy Consumption",
        xlab = "Theoretical Quantiles",
        ylab = "Sample Quantiles")
-qqline(camara_on_zoom_distribution$energy_consumed)
+qqline(camara_distribution$energy_consumed)
 
 
-camara_off_zoom_distribution <-  all_energy_data %>%
-  filter(grepl("zoom_camara_off", usage_scenario ))  
 
-ggplot(camara_off_zoom_distribution, aes(energy_consumed, color = usage_scenario))+
+camara_ON_distribution <-  all_energy_data %>%
+  filter(grepl("camara_on", usage_scenario ))  
+
+ggplot(camara_ON_distribution, aes(energy_consumed, color = usage_scenario))+
   geom_density()+
   labs(
-    title = "Zoom energy consumption",
-    subtitle = "Zoom Energy consumption with camera OFF (J)"  
-  )
-qqnorm(camara_off_zoom_distribution$energy_consumed,
-       main = "camara_off_zoom_distribution energy Consumed",
-       xlab = "Theoretical Quantiles",
-       ylab = "Sample Quantiles")
-qqline(camara_off_zoom_distribution$energy_consumed)
-
-
-
-camara_on_skype_distribution <-  all_energy_data %>%
-  filter(grepl("skype_camara_on", usage_scenario ))  
-
-ggplot(camara_on_skype_distribution, aes(energy_consumed, color = usage_scenario))+
-  geom_density()+
-  labs(
-    title = "Skype energy consumption",
-    subtitle = "Skype energy consumption with camera ON (J)"  
+    title = "All camera ON usage energy consumption",
+    subtitle = "energy consumption for all camera usage across measured applications (J)"  
   ) 
-qqnorm(camara_on_skype_distribution$energy_consumed,
-       main = "camara_on_skype_distribution energy Consumed",
+qqnorm(camara_ON_distribution$energy_consumed,
+       main = "camera distribution energy Consumption",
        xlab = "Theoretical Quantiles",
        ylab = "Sample Quantiles")
-qqline(camara_on_skype_distribution$energy_consumed)
+qqline(camara_ON_distribution$energy_consumed)
 
 
+camara_OFF_distribution <-  all_energy_data %>%
+  filter(grepl("camara_off", usage_scenario ))  
 
-camara_off_skype_distribution <-  all_energy_data %>%
-  filter(grepl("skype_camara_off", usage_scenario ))  
-
-ggplot(camara_off_skype_distribution, aes(energy_consumed, color = usage_scenario))+
+ggplot(camara_OFF_distribution, aes(energy_consumed, color = usage_scenario))+
   geom_density()+
   labs(
-    title = "Skype energy consumption",
-    subtitle = "Skype energy consumption with camera OFF (J)"  
-  )
-qqnorm(camara_off_skype_distribution$energy_consumed,
-       main = "camara_off_skype_distribution energy Consumed",
-       xlab = "Theoretical Quantiles",
-       ylab = "Sample Quantiles")
-qqline(camara_off_skype_distribution$energy_consumed)
-
-
-
-camara_on_element_distribution <-  all_energy_data %>%
-  filter(grepl("element_camara_on", usage_scenario ))  
-
-ggplot(camara_on_element_distribution, aes(energy_consumed, color = usage_scenario))+
-  geom_density()+
-  labs(
-    title = "Element energy consumption",
-    subtitle = "Element energy consumption with camera ON (J)"  
+    title = "All camera OFF usage energy consumption",
+    subtitle = "energy consumption for all camera usage across measured applications (J)"  
   ) 
-qqnorm(camara_on_element_distribution$energy_consumed,
-       main = "camara_on_element_distribution energy Consumed",
+qqnorm(camara_OFF_distribution$energy_consumed,
+       main = "camera distribution energy Consumption",
        xlab = "Theoretical Quantiles",
        ylab = "Sample Quantiles")
-qqline(camara_on_element_distribution$energy_consumed)
+qqline(camara_OFF_distribution$energy_consumed)
 
-
-camara_off_element_distribution <-  all_energy_data %>%
-  filter(grepl("element_camara_off", usage_scenario ))  
-
-ggplot(camara_off_element_distribution, aes(energy_consumed, color = usage_scenario))+
-  geom_density()+
-  labs(
-    title = "Element energy consumption",
-    subtitle = "Element energy consumption with camera OFF (J)"  
-  )
-qqnorm(camara_off_element_distribution$energy_consumed,
-       main = "camara_off_element_distribution energy Consumed",
-       xlab = "Theoretical Quantiles",
-       ylab = "Sample Quantiles")
-qqline(camara_off_element_distribution$energy_consumed)
-
-
-
-camara_on_rocket_distribution <-  all_energy_data %>%
-  filter(grepl("rocket_camara_on", usage_scenario ))  
-
-ggplot(camara_on_rocket_distribution, aes(energy_consumed, color = usage_scenario))+
-  geom_density()+
-  labs(
-    title = "Rocket energy consumption",
-    subtitle = "Rocket Energy consumption with camera ON (J)"  
-  ) 
-qqnorm(camara_on_rocket_distribution$energy_consumed,
-       main = "camara_on_rocket_distribution energy Consumed",
-       xlab = "Theoretical Quantiles",
-       ylab = "Sample Quantiles")
-qqline(camara_on_rocket_distribution$energy_consumed)
-
-
-camara_off_rocket_distribution <-  all_energy_data %>%
-  filter(grepl("rocket_camara_off", usage_scenario ))  
-
-ggplot(camara_off_rocket_distribution, aes(energy_consumed, color = usage_scenario))+
-  geom_density()+
-  labs(
-    title = "Rocket.chat energy consumption",
-    subtitle = "Rocket.chat energy consumption with camera OFF (J)"  
-  )
-qqnorm(camara_off_rocket_distribution$energy_consumed,
-       main = "camara_off_rocket_distribution energy Consumed",
-       xlab = "Theoretical Quantiles",
-       ylab = "Sample Quantiles")
-qqline(camara_off_rocket_distribution$energy_consumed)
 
 
 # normality test with shapiro test to confirm if data  to check if energy consumption data is normally distributed
-shapiro_test_result <- shapiro.test(consumption_statistics$median)
-shapiro_test<- view(shapiro_test_result)
+
+camara_on_data <- consumption_statistics %>%
+  filter(grepl("camara_on", usage_scenario))
+shapiro_cam_on_result <- shapiro.test(camara_on_data$Total_usage)
+view(shapiro_cam_on_result)
+
+camara_off_data <- consumption_statistics %>%
+  filter(grepl("camara_off", usage_scenario))
+shapiro_cam_off_result <- shapiro.test(camara_off_data$Total_usage)
+view(shapiro_cam_off_result)
+
+pdfs_data <- consumption_statistics %>%
+  filter(grepl("pdf", usage_scenario))
+shapiro_pdf_result <- shapiro.test(pdfs_data$Total_usage)
+view(shapiro_pdf_result)
+
+zip_data <- consumption_statistics %>%
+  filter(grepl("zip", usage_scenario))
+shapiro_zip_result <- shapiro.test(zip_data$Total_usage)
+view(shapiro_zip_result)
+
+image_data <- consumption_statistics %>%
+  filter(grepl("image", usage_scenario))
+shapiro_image_result <- shapiro.test(image_data$Total_usage)
+view(shapiro_image_result)
+
+message_data <- consumption_statistics %>%
+  filter(grepl("message", usage_scenario))
+shapiro_message_result <- shapiro.test(message_data$Total_usage)
+view(shapiro_message_result)
+
 
 #visualising relationship between usage scenario and energy consumed
 ggplot(all_energy_data, aes(usage_scenario, energy_consumed)) +
@@ -408,19 +392,21 @@ ggplot(all_energy_data, aes(usage_scenario, energy_consumed)) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
 #Group barplot showing usage_scenario for all collaborative software application measured
-
 group_bar_plot <- consumption_statistics %>%
   mutate(group = case_when(
     grepl("zoom", usage_scenario) ~ "zoom",
     grepl("skype", usage_scenario) ~ "skype",
     grepl("element", usage_scenario) ~ "element",
     grepl("rocket", usage_scenario) ~ "rocket"
-    
   ))
-ggplot(group_bar_plot, aes(x = group, y = Total_usage, fill = usage_scenario)) +
+#view(group_bar_plot)
+
+group_bar <- ggplot(group_bar_plot, aes(x = usage_scenario, y = Total_usage, fill = group)) +
   geom_bar(stat = "identity", position = "dodge") +
   labs(title = "All applications grouped Bar Plot", x = "applications & usage scenario", y = "Total_usage") +
-  theme(legend.position =  "bottom")
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+ggsave("group_barplot.png", group_bar, width = 6, height = 8, units = "in")
+
 
 # testing hypothesis for sending messages in Foss and commerical software (foss_massage vs commercial_message)
 messages_hyp <- all_energy_data %>%
@@ -557,4 +543,44 @@ view(com_foss)
 com_foss_hyp <- kruskal.test(energy_consumed ~ usage_scenario, data = cam_off_com_foss)
 view(com_foss_hyp)
 #p_value = 5.565149e-14, reject null hypothesis
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
