@@ -1,0 +1,4 @@
+"0","qqnorm(messages_distribution$energy_consumed,"
+"0","       main = ""Messages distribution energy Consumed"","
+"0","       xlab = ""Theoretical Quantiles"","
+"0","       ylab = ""Sample Quantiles"")"
