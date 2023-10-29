@@ -348,34 +348,35 @@ qqline(camara_OFF_distribution$energy_consumed)
 
 # normality test with shapiro test to confirm if data  to check if energy consumption data is normally distributed
 
-camara_on_data <- consumption_statistics %>%
+camara_on_data <- all_energy_data %>%
   filter(grepl("camara_on", usage_scenario))
-shapiro_cam_on_result <- shapiro.test(camara_on_data$Total_usage)
-view(shapiro_cam_on_result)
+view(camara_on_data)
 
-camara_off_data <- consumption_statistics %>%
+shapiro_cam_on_result <- shapiro.test(camara_on_data$energy_consumed)
+print(shapiro_cam_on_result)
+camara_off_data <- all_energy_data %>%
   filter(grepl("camara_off", usage_scenario))
-shapiro_cam_off_result <- shapiro.test(camara_off_data$Total_usage)
+shapiro_cam_off_result <- shapiro.test(camara_off_data$energy_consumed)
 view(shapiro_cam_off_result)
 
-pdfs_data <- consumption_statistics %>%
+pdfs_data <- all_energy_data %>%
   filter(grepl("pdf", usage_scenario))
-shapiro_pdf_result <- shapiro.test(pdfs_data$Total_usage)
+shapiro_pdf_result <- shapiro.test(pdfs_data$energy_consumed)
 view(shapiro_pdf_result)
 
-zip_data <- consumption_statistics %>%
+zip_data <- all_energy_data %>%
   filter(grepl("zip", usage_scenario))
-shapiro_zip_result <- shapiro.test(zip_data$Total_usage)
+shapiro_zip_result <- shapiro.test(zip_data$energy_consumed)
 view(shapiro_zip_result)
 
-image_data <- consumption_statistics %>%
+image_data <- all_energy_data %>%
   filter(grepl("image", usage_scenario))
-shapiro_image_result <- shapiro.test(image_data$Total_usage)
+shapiro_image_result <- shapiro.test(image_data$energy_consumed)
 view(shapiro_image_result)
 
-message_data <- consumption_statistics %>%
+message_data <- all_energy_data %>%
   filter(grepl("message", usage_scenario))
-shapiro_message_result <- shapiro.test(message_data$Total_usage)
+shapiro_message_result <- shapiro.test(message_data$energy_consumed)
 view(shapiro_message_result)
 
 
