@@ -2,7 +2,8 @@
 
 #library(tidyverse)
 #library(tidyr)
-#cdlibrary(writexl)
+#library(writexl)
+#library(rstatix)
 
 #loading energy_data
 energy_data <- read.csv("all_energy_consumption.csv", colClasses = rep("numeric", 25))
@@ -314,8 +315,6 @@ qqnorm(camara_distribution$energy_consumed,
        ylab = "Sample Quantiles")
 qqline(camara_distribution$energy_consumed)
 
-
-
 camara_ON_distribution <-  all_energy_data %>%
   filter(grepl("camara_on", usage_scenario ))  
 
@@ -331,7 +330,6 @@ qqnorm(camara_ON_distribution$energy_consumed,
        ylab = "Sample Quantiles")
 qqline(camara_ON_distribution$energy_consumed)
 
-
 camara_OFF_distribution <-  all_energy_data %>%
   filter(grepl("camara_off", usage_scenario ))  
 
@@ -346,7 +344,6 @@ qqnorm(camara_OFF_distribution$energy_consumed,
        xlab = "Theoretical Quantiles",
        ylab = "Sample Quantiles")
 qqline(camara_OFF_distribution$energy_consumed)
-
 
 
 # normality test with shapiro test to confirm if data  to check if energy consumption data is normally distributed
@@ -417,6 +414,11 @@ view(messages_hyp)
 
 msg_hyp <- kruskal.test(energy_consumed ~ usage_scenario, data = messages_hyp)
 view(msg_hyp)
+
+effsize_msg <- messages_hyp %>% 
+  kruskal_effsize(energy_consumed ~ usage_scenario)
+view(effsize_msg)
+
 # p_value = 1.212059e-06,
 #low p-value indicates that the observed differences in medians among groups are
 #statistically significant. In other words, it suggests that there is a significant difference 
@@ -434,6 +436,10 @@ view(images_hyp)
 img_hyp <- kruskal.test(energy_consumed ~ usage_scenario, data = images_hyp)
 view(img_hyp)
 
+effsize_img <- images_hyp %>% 
+  kruskal_effsize(energy_consumed ~ usage_scenario)
+view(effsize_img)
+
 # p_value = 0.000129871, strong signficance difference when sending 
 #messages between FOSS and commercial collaborative software, we reject the null hypothesis
 
@@ -447,6 +453,10 @@ view(zip)
 
 Zip_hyp <- kruskal.test(energy_consumed ~ usage_scenario, data = zip)
 view(Zip_hyp)
+
+effsize_zip <- zip %>% 
+  kruskal_effsize(energy_consumed ~ usage_scenario)
+view(effsize_zip)
 # p_value = 2.060983e-08, significance difference exist, reject null hypothesis
 
 
@@ -459,6 +469,10 @@ view(pdf)
 
 pdf_hyp <- kruskal.test(energy_consumed ~ usage_scenario, data = pdf)
 view(pdf_hyp)
+
+effsize_pdf <- pdf %>% 
+  kruskal_effsize(energy_consumed ~ usage_scenario)
+view(effsize_pdf)
 #p_value = 1.174364e-09, reject null hypothesis
 
 
@@ -471,6 +485,11 @@ view(F_pdf)
 
 foss_zip_pdf_hyp <- kruskal.test(energy_consumed ~ usage_scenario, data = F_pdf)
 view(foss_zip_pdf_hyp)
+
+effsize_foss_pdf <- F_pdf %>% 
+  kruskal_effsize(energy_consumed ~ usage_scenario)
+view(effsize_foss_pdf)
+
 #p_value = 0.003072862, less than threshold, reject null hypothesis
 
 
@@ -483,6 +502,10 @@ view(C_pdf)
 
 com_zip_pdf_hyp <- kruskal.test(energy_consumed ~ usage_scenario, data = C_pdf)
 view(com_zip_pdf_hyp)
+
+effsize_com_pdf <- C_pdf %>% 
+  kruskal_effsize(energy_consumed ~ usage_scenario)
+view(effsize_com_pdf)
 # p_value = 0.250347, above threshold we accept null hypothesis
 
 
@@ -495,6 +518,10 @@ view(cam_on_off_foss)
 
 foss_cam_on_off_hyp <- kruskal.test(energy_consumed ~ usage_scenario, data = cam_on_off_foss)
 view(foss_cam_on_off_hyp)
+
+effsize_all_cam_foss <- cam_on_off_foss %>% 
+  kruskal_effsize(energy_consumed ~ usage_scenario)
+view(effsize_all_cam_foss)
 #p_value = 0.002343648, we reject null hypothesis, significance difference exist
 
 
@@ -507,6 +534,10 @@ view(cam_on_off_com)
 
 com_cam_on_off_hyp <- kruskal.test(energy_consumed ~ usage_scenario, data = cam_on_off_com)
 view(com_cam_on_off_hyp)
+
+effsize_all_cam_comm <- cam_on_off_com %>% 
+  kruskal_effsize(energy_consumed ~ usage_scenario)
+view(effsize_all_cam_comm)
 #p_value = 7.560632e-09, reject null hypothesis
 
 
@@ -519,6 +550,10 @@ view(cam_on_com_foss)
 
 com_foss_cam_on_hyp <- kruskal.test(energy_consumed ~ usage_scenario, data = cam_on_com_foss)
 view(com_foss_cam_on_hyp)
+
+effsize_cam_on_com_foss <- cam_on_com_foss %>% 
+  kruskal_effsize(energy_consumed ~ usage_scenario)
+view(effsize_cam_on_com_foss)
 #p_value = 6.386841e-14, reject null hypothesis
 
 
@@ -531,6 +566,10 @@ view(cam_off_com_foss)
 
 com_foss_cam_off_hyp <- kruskal.test(energy_consumed ~ usage_scenario, data = cam_off_com_foss)
 view(com_foss_cam_off_hyp)
+
+effsize_cam_off_com_foss <- cam_off_com_foss %>% 
+  kruskal_effsize(energy_consumed ~ usage_scenario)
+view(effsize_cam_off_com_foss)
 #p_value = 5.565149e-14, reject null hypothesis
 
 #testing hypothesis for all FOSS and commercial collaborative software application usage scenario(FOSS Vs Commercial) 
@@ -540,37 +579,14 @@ com_foss <- all_energy_data %>%
   arrange(usage_scenario)
 view(com_foss)
 
-com_foss_hyp <- kruskal.test(energy_consumed ~ usage_scenario, data = cam_off_com_foss)
+com_foss_hyp <- kruskal.test(energy_consumed ~ usage_scenario, data = com_foss)
 view(com_foss_hyp)
+
+effsize_com_foss <- com_foss %>% 
+  kruskal_effsize(energy_consumed ~ usage_scenario)
+view(effsize_com_foss)
+
 #p_value = 5.565149e-14, reject null hypothesis
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
