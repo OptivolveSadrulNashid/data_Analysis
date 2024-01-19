@@ -1,9 +1,16 @@
 
 
+<<<<<<< HEAD
 library(tidyverse)
 library(tidyr)
 library(writexl)
 library(rstatix)
+=======
+#library(tidyverse)
+#library(tidyr)
+#library(writexl)
+#library(rstatix)
+>>>>>>> 4a9da9b3ad661d67286cd8ed7617069d20be15c6
 
 #loading energy_data
 energy_data <- read.csv("all_energy_consumption_latest.csv", colClasses = rep("numeric", 25))
@@ -12,6 +19,7 @@ view(energy_data)
 #select columns for usage_scenario  to explore energy consumption
 
 
+<<<<<<< HEAD
 camera_off <- c("Attempts", "zoom_camera_off_total_power", "skype_camera_off_total_power",
                 "element_camera_off_total_power","rocket_camera_off_total_power")
 camera_off_all_apps <- energy_data[camera_off]
@@ -45,6 +53,41 @@ ggplot(camera_on_all_apps, aes(x = Attempts)) +
     y = "Camera ON Energy Consumption (J)",
     color = "Variable",
     title = "Camera ON energy consumption (J)"
+=======
+camara_off <- c("Attempts", "zoom_camara_off_total_power", "skype_camara_off_total_power",
+                "element_camara_off_total_power","rocket_camara_off_total_power")
+camara_off_all_apps <- energy_data[camara_off]
+#view(camara_off_all_apps)
+ggplot(camara_off_all_apps, aes(x = Attempts)) +
+  geom_line(aes(y = skype_camara_off_total_power, color = "skype_camara_off"), linetype = "solid") +
+  geom_line(aes(y = zoom_camara_off_total_power, color = "zoom_camara_off"), linetype = "solid") +
+  geom_line(aes(y = element_camara_off_total_power, color = "element_camara_off"), linetype = "solid") +
+  geom_line(aes(y = rocket_camara_off_total_power, color = "rocket_camara_off"), linetype = "solid") +
+  labs(
+    x = "Attempts",
+    y = "Camara OFF Energy Consumption (J)",
+    color = "Variable",
+    title = "Camara OFF energy consumption (J)"
+  )
+
+camara_on <- c("Attempts", "zoom_camara_on_total_power", "skype_camara_on_total_power",
+               "element_camara_on_total_power","rocket_camara_on_total_power")
+
+
+camara_on_all_apps <- energy_data[camara_on]
+#view(camara_on_all_apps)
+
+ggplot(camara_on_all_apps, aes(x = Attempts)) +
+  geom_line(aes(y = skype_camara_on_total_power, color = "skype_camara_on"), linetype = "solid") +
+  geom_line(aes(y = zoom_camara_on_total_power, color = "zoom_camara_on"), linetype = "solid") +
+  geom_line(aes(y = element_camara_on_total_power, color = "element_camara_on"), linetype = "solid") +
+  geom_line(aes(y = rocket_camara_on_total_power, color = "rocket_camara_on"), linetype = "solid") +
+  labs(
+    x = "Attempts",
+    y = "Camara ON Energy Consumption (J)",
+    color = "Variable",
+    title = "Camara ON energy consumption (J)"
+>>>>>>> 4a9da9b3ad661d67286cd8ed7617069d20be15c6
   )
 
 selected_columns_for_zoom <- c("Attempts", "zoom_zip_total_power", "zoom_message_total_power",
@@ -301,44 +344,74 @@ qqline(messages_distribution$energy_consumed)
 
 
 camara_distribution <-  all_energy_data %>%
+<<<<<<< HEAD
   filter(grepl("camera_on|camera_off", usage_scenario ))  
 
 ggplot(camera_distribution, aes(energy_consumed, color = usage_scenario))+
+=======
+  filter(grepl("camara_on|camara_off", usage_scenario ))  
+
+ggplot(camara_distribution, aes(energy_consumed, color = usage_scenario))+
+>>>>>>> 4a9da9b3ad661d67286cd8ed7617069d20be15c6
   geom_density()+
   labs(
     title = "All camera usage energy consumption",
     subtitle = "energy consumption for all camera usage across measured applications (J)"  
   ) 
+<<<<<<< HEAD
 qqnorm(camera_distribution$energy_consumed,
+=======
+qqnorm(camara_distribution$energy_consumed,
+>>>>>>> 4a9da9b3ad661d67286cd8ed7617069d20be15c6
        main = "camera distribution energy Consumption",
        xlab = "Theoretical Quantiles",
        ylab = "Sample Quantiles")
 qqline(camara_distribution$energy_consumed)
 
+<<<<<<< HEAD
 camera_ON_distribution <-  all_energy_data %>%
   filter(grepl("camera_on", usage_scenario ))  
 
 ggplot(camera_ON_distribution, aes(energy_consumed, color = usage_scenario))+
+=======
+camara_ON_distribution <-  all_energy_data %>%
+  filter(grepl("camara_on", usage_scenario ))  
+
+ggplot(camara_ON_distribution, aes(energy_consumed, color = usage_scenario))+
+>>>>>>> 4a9da9b3ad661d67286cd8ed7617069d20be15c6
   geom_density()+
   labs(
     title = "All camera ON usage energy consumption",
     subtitle = "energy consumption for all camera usage across measured applications (J)"  
   ) 
+<<<<<<< HEAD
 qqnorm(camera_ON_distribution$energy_consumed,
        main = "camera distribution energy Consumption",
        xlab = "Theoretical Quantiles",
        ylab = "Sample Quantiles")
 qqline(camera_ON_distribution$energy_consumed)
+=======
+qqnorm(camara_ON_distribution$energy_consumed,
+       main = "camera distribution energy Consumption",
+       xlab = "Theoretical Quantiles",
+       ylab = "Sample Quantiles")
+qqline(camara_ON_distribution$energy_consumed)
+>>>>>>> 4a9da9b3ad661d67286cd8ed7617069d20be15c6
 
 camara_OFF_distribution <-  all_energy_data %>%
   filter(grepl("camara_off", usage_scenario ))  
 
+<<<<<<< HEAD
 ggplot(camera_OFF_distribution, aes(energy_consumed, color = usage_scenario))+
+=======
+ggplot(camara_OFF_distribution, aes(energy_consumed, color = usage_scenario))+
+>>>>>>> 4a9da9b3ad661d67286cd8ed7617069d20be15c6
   geom_density()+
   labs(
     title = "All camera OFF usage energy consumption",
     subtitle = "energy consumption for all camera usage across measured applications (J)"  
   ) 
+<<<<<<< HEAD
 qqnorm(camera_OFF_distribution$energy_consumed,
        main = "camera distribution energy Consumption",
        xlab = "Theoretical Quantiles",
@@ -352,12 +425,20 @@ camera_on_data <- consumption_statistics %>%
   filter(grepl("camara_on", usage_scenario))
 shapiro_cam_on_result <- shapiro.test(camera_on_data$Total_usage)
 view(shapiro_cam_on_result)
+=======
+qqnorm(camara_OFF_distribution$energy_consumed,
+       main = "camera distribution energy Consumption",
+       xlab = "Theoretical Quantiles",
+       ylab = "Sample Quantiles")
+qqline(camara_OFF_distribution$energy_consumed)
+>>>>>>> 4a9da9b3ad661d67286cd8ed7617069d20be15c6
 
 camera_off_data <- consumption_statistics %>%
   filter(grepl("camara_off", usage_scenario))
 shapiro_cam_off_result <- shapiro.test(camera_off_data$Total_usage)
 view(shapiro_cam_off_result)
 
+<<<<<<< HEAD
 pdfs_data <- consumption_statistics %>%
   filter(grepl("pdf", usage_scenario))
 shapiro_pdf_result <- shapiro.test(pdfs_data$Total_usage)
@@ -377,8 +458,45 @@ message_data <- consumption_statistics %>%
   filter(grepl("message", usage_scenario))
 shapiro_message_result <- shapiro.test(message_data$Total_usage)
 view(shapiro_message_result)
+=======
+# normality test with shapiro test to confirm if data  to check if energy consumption data is normally distributed
 
+camara_on_data <- all_energy_data %>%
+  filter(grepl("camara_on", usage_scenario))
+view(camara_on_data)
 
+shapiro_cam_on_result <- shapiro.test(camara_on_data$energy_consumed)
+print(shapiro_cam_on_result)
+camara_off_data <- all_energy_data %>%
+  filter(grepl("camara_off", usage_scenario))
+shapiro_cam_off_result <- shapiro.test(camara_off_data$energy_consumed)
+view(shapiro_cam_off_result)
+
+pdfs_data <- all_energy_data %>%
+  filter(grepl("pdf", usage_scenario))
+shapiro_pdf_result <- shapiro.test(pdfs_data$energy_consumed)
+view(shapiro_pdf_result)
+
+zip_data <- all_energy_data %>%
+  filter(grepl("zip", usage_scenario))
+shapiro_zip_result <- shapiro.test(zip_data$energy_consumed)
+view(shapiro_zip_result)
+
+image_data <- all_energy_data %>%
+  filter(grepl("image", usage_scenario))
+shapiro_image_result <- shapiro.test(image_data$energy_consumed)
+view(shapiro_image_result)
+>>>>>>> 4a9da9b3ad661d67286cd8ed7617069d20be15c6
+
+message_data <- all_energy_data %>%
+  filter(grepl("message", usage_scenario))
+shapiro_message_result <- shapiro.test(message_data$energy_consumed)
+view(shapiro_message_result)
+
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4a9da9b3ad661d67286cd8ed7617069d20be15c6
 #visualising relationship between usage scenario and energy consumed
 ggplot(all_energy_data, aes(usage_scenario, energy_consumed)) +
   geom_boxplot()+
@@ -581,9 +699,31 @@ view(com_foss)
 
 com_foss_hyp <- kruskal.test(energy_consumed ~ usage_scenario, data = com_foss)
 view(com_foss_hyp)
+<<<<<<< HEAD
 
 effsize_com_foss <- com_foss %>% 
   kruskal_effsize(energy_consumed ~ usage_scenario)
 view(effsize_com_foss)
 
 #p_value = 5.565149e-14, reject null hypothesis
+=======
+
+effsize_com_foss <- com_foss %>% 
+  kruskal_effsize(energy_consumed ~ usage_scenario)
+view(effsize_com_foss)
+
+#p_value = 5.565149e-14, reject null hypothesis
+
+
+
+
+
+
+
+
+
+
+
+
+
+>>>>>>> 4a9da9b3ad661d67286cd8ed7617069d20be15c6
