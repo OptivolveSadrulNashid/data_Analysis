@@ -1,0 +1,86 @@
+---
+title: "GroupBarGraph"
+author: "Cindy"
+date: "2023-10-28"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+#libraries
+library(readxl)
+library(dplyr)
+library(tidyr)
+library(gridExtra)
+```
+
+
+```{r}
+#open data file
+
+# Specify the path to the XLSX file
+file_path <- "cons_statistic.xlsx"
+
+# Read the XLSX file into a data frame
+data <- read_xlsx(file_path, sheet = "Sheet1")
+
+# Print the data frame
+data  # or just 'data' without print() to display it in the R console
+```
+
+```{r}
+#Break Usage Scenario per Application
+data <- data %>%
+  separate(usage_scenario, into = c("application", "usage_scenario6"), sep = "_", extra = "merge", remove = FALSE) %>%
+  mutate(
+    application = sub("_.*", "", application),
+    usage_scenario6 = sub("_total_power", "", usage_scenario6)
+  )
+
+
+# Print the modified data frame
+print(data)
+```
+
+```{r}
+#Left only application, usage_scenario6, and average_usage
+# Load the dplyr package
+library(dplyr)
+
+# Create a new dataframe with selected columns
+average_data <- data %>% select(application, usage_scenario6, average_usage)
+
+# Print the new dataframe
+print(average_data)
+```
+```{r}
+# Save the plot as a PNG file
+library(gridExtra)
+
+# Create a tableGrob from the new_data table
+table_grob <- tableGrob(average_data)
+
+# Save the table as a PNG file
+ggsave("average_data.png", table_grob, width = 6, height = 8, units = "in")
+
+# Save the table as a CSV file
+write.csv(average_data, "average_data.csv", row.names = FALSE)
+```
+
+
+```{r}
+# Load the ggplot2 package
+library(ggplot2)
+
+# Create the grouped bar graph
+ggplot(average_data, aes(x = application, y = average_usage, fill = usage_scenario6)) +
+  geom_bar(stat = "identity", position = position_dodge(width = 0.9)) +
+  labs(
+    x = "application",
+    y = "average_usage",
+    fill = "usage_scenario"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "top")
+```
+
+

@@ -1,17 +1,16 @@
-
-
-library(tidyverse)
-library(tidyr)
-library(writexl)
-library(rstatix)
+#library(tidyverse)
+#library(tidyr)
+#library(writexl)
+#library(rstatix)
+#library(car)
+#library(dplyr)
 
 #loading energy_data
-energy_data <- read.csv("all_energy_consumption_latest.csv", colClasses = rep("numeric", 25))
+energy_data <- read.csv("all_energy_consumption_Latest1.csv", colClasses = rep("numeric", 25))
 view(energy_data)
 
-#select columns for usage_scenario  to explore energy consumption
 
-
+############################## ALL CAMERA OFF usage ########################
 camera_off <- c("Attempts", "zoom_camera_off_total_power", "skype_camera_off_total_power",
                 "element_camera_off_total_power","rocket_camera_off_total_power")
 camera_off_all_apps <- energy_data[camera_off]
@@ -28,13 +27,11 @@ ggplot(camera_off_all_apps, aes(x = Attempts)) +
     title = "Camera OFF energy consumption (J)"
   )
 
+############################## ALL CAMERA ON usage ########################
 camera_on <- c("Attempts", "zoom_camera_on_total_power", "skype_camera_on_total_power",
                "element_camera_on_total_power","rocket_camera_on_total_power")
-
-
 camera_on_all_apps <- energy_data[camera_on]
 #view(camera_on_all_apps)
-
 ggplot(camera_on_all_apps, aes(x = Attempts)) +
   geom_line(aes(y = skype_camera_on_total_power, color = "skype_camera_on"), linetype = "solid") +
   geom_line(aes(y = zoom_camera_on_total_power, color = "zoom_camera_on"), linetype = "solid") +
@@ -46,6 +43,33 @@ ggplot(camera_on_all_apps, aes(x = Attempts)) +
     color = "Variable",
     title = "Camera ON energy consumption (J)"
   )
+
+###################### SKYPE USAGE ################################
+selected_columns_for_skype <- c("Attempts", "skype_zip_total_power", "skype_message_total_power", 
+                                "skype_image_total_power", "skype_camera_on_total_power",
+                                "skype_pdf_total_power", "skype_camera_off_total_power")
+
+
+skype_table <- energy_data[selected_columns_for_skype]
+#view(skype_table)
+
+ggplot(skype_table, aes(x = Attempts)) +
+  geom_line(aes(y = skype_zip_total_power, color = "skype_zip_total_power"), linetype = "solid") +
+  geom_line(aes(y = skype_message_total_power, color = "skype_message_total_power"), linetype = "solid") +
+  geom_line(aes(y = skype_image_total_power, color = "skype_image_total_power"), linetype = "solid") +
+  geom_line(aes(y = skype_camera_on_total_power, color = "skype_camera_on_total_power"), linetype = "solid") +
+  geom_line(aes(y = skype_pdf_total_power, color = "skype_pdf_total_power"), linetype = "solid") +
+  geom_line(aes(y = skype_camera_off_total_power, color = "skype_camera_off_total_power"), linetype = "solid") +
+  labs(
+    x = "Attempts",
+    y = "Energy Consumption (J)",
+    color = "Variable",
+    title = "Skype energy consumption",
+    subtitle = "Energy consumption for all skype usage_scenario (J)"  
+  ) 
+
+
+##################################Zoom USAGE ###################################
 
 selected_columns_for_zoom <- c("Attempts", "zoom_zip_total_power", "zoom_message_total_power",
                                "zoom_image_total_power", "zoom_camera_on_total_power",
@@ -68,27 +92,7 @@ ggplot(zoom_table, aes(x = Attempts)) +
     subtitle = "Energy consumption for all zoom usage_scenario (J)"  
   ) 
 
-selected_columns_for_skype <- c("Attempts", "skype_zip_total_power", "skype_message_total_power", 
-                                "skype_image_total_power", "skype_camera_on_total_power",
-                                "skype_pdf_total_power", "skype_camera_off_total_power")
-
-skype_table <- energy_data[selected_columns_for_skype]
-#view(skype_table)
-
-ggplot(skype_table, aes(x = Attempts)) +
-  geom_line(aes(y = skype_zip_total_power, color = "skype_zip_total_power"), linetype = "solid") +
-  geom_line(aes(y = skype_message_total_power, color = "skype_message_total_power"), linetype = "solid") +
-  geom_line(aes(y = skype_image_total_power, color = "skype_image_total_power"), linetype = "solid") +
-  geom_line(aes(y = skype_camara_on_total_power, color = "skype_camera_on_total_power"), linetype = "solid") +
-  geom_line(aes(y = skype_pdf_total_power, color = "skype_pdf_total_power"), linetype = "solid") +
-  geom_line(aes(y = skype_camara_off_total_power, color = "skype_camera_off_total_power"), linetype = "solid") +
-  labs(
-    x = "Attempts",
-    y = "Energy Consumption (J)",
-    color = "Variable",
-    title = "Skype energy consumption",
-    subtitle = "Energy consumption for all skype usage_scenario (J)"  
-  ) 
+#################################### ROCKET USAGE ############################
 
 selected_columns_for_rocket <- c("Attempts", "rocket_zip_total_power", "rocket_message_total_power",
                                  "rocket_image_total_power", "rocket_camera_on_total_power", 
@@ -111,6 +115,7 @@ ggplot(rocket_table, aes(x = Attempts)) +
     subtitle = "Energy consumption for all rocket.chat usage_scenario (J)"  
   ) 
 
+########################### Element USAGE #####################
 selected_columns_for_element <- c("Attempts", "element_zip_total_power", "element_message_total_power",
                                   "element_image_total_power", "element_camera_on_total_power",
                                   "element_pdf_total_power", "element_camera_off_total_power")
@@ -133,7 +138,6 @@ ggplot(element_table, aes(x = Attempts)) +
     subtitle = "Energy consumption for all element usage_scenario (J)"  
   ) 
 
-
 #Exploring distribution across usage scenario
 pdfs_across_apps <- c("Attempts", "skype_pdf_total_power", "zoom_pdf_total_power", "element_pdf_total_power", "rocket_pdf_total_power")
 
@@ -153,6 +157,7 @@ ggplot(pdfs_across, aes(x = Attempts)) +
     subtitle = "PDF files energy consumption accross collaborative software application (J)"  
   )
 
+########################### ZIP###########################
 zip_across_apps <- c("Attempts", "skype_zip_total_power", "zoom_zip_total_power", "element_zip_total_power", "rocket_zip_total_power")
 
 zip_across <- energy_data[zip_across_apps]
@@ -171,6 +176,7 @@ ggplot(zip_across, aes(x = Attempts)) +
     subtitle = "ZIP energy consumption accross collaborative software applications (J)"  
   ) 
 
+############################# IMAGE usage ####################
 images_across_apps <- c("Attempts", "skype_image_total_power", "zoom_image_total_power", 
                         "element_image_total_power", "rocket_image_total_power")
 image_across <- energy_data[images_across_apps]
@@ -207,7 +213,8 @@ ggplot(message_across, aes(x = Attempts)) +
     subtitle = "Messages energy consumption accross collaborative software applications (J)"  
   )
 
-#pivoting to allow for comparison using kruskal test.
+############################## Descriptive statistics###############
+#pivoting to allow for statistical test.
 all_energy_data <- energy_data %>%
   pivot_longer(
     cols = contains("total_power"),
@@ -236,15 +243,15 @@ file_path <- "cons_statistic.xlsx"
 write_xlsx(consumption_statistics, file_path)
 
 
+####################### Normality checking using density plot###############
+# distribution of consumption by usage_scenarios for all applications to check for normality and fitness of data, with density, qq_plot and confirmed by shaprio's test#############################
 
-# distribution of consumption by usage_scenarios for all applications to check for normality and fitness of data
 pdf_distribution <-  all_energy_data %>%
   filter(grepl("pdf", usage_scenario ))  
 
 ggplot(pdf_distribution, aes(energy_consumed, color = usage_scenario))+
   geom_density()+
   labs(
-    title = "PDF energy consumption",
     subtitle = "PDF Energy consumption for all measured applications (J)"  
   ) 
 qqnorm(pdf_distribution$energy_consumed,
@@ -259,7 +266,6 @@ zip_distribution <-  all_energy_data %>%
 ggplot(zip_distribution, aes(energy_consumed, color = usage_scenario))+
   geom_density()+
   labs(
-    title = "ZIP energy consumption",
     subtitle = "ZIP Energy consumption for all measured applications (J)"  
   )
 qqnorm(zip_distribution$energy_consumed,
@@ -274,7 +280,6 @@ image_distribution <-  all_energy_data %>%
 ggplot(image_distribution, aes(energy_consumed, color = usage_scenario))+
   geom_density()+
   labs(
-    title = "Image energy consumption",
     subtitle = "Image Energy consumption for all measured applications (J)"  
   ) 
 qqnorm(image_distribution$energy_consumed,
@@ -290,7 +295,6 @@ messages_distribution <-  all_energy_data %>%
 ggplot(messages_distribution, aes(energy_consumed, color = usage_scenario))+
   geom_density()+
   labs(
-    title = "Messages energy consumption",
     subtitle = "Message energy consumption for all measured applications (J)"  
   ) 
 qqnorm(messages_distribution$energy_consumed,
@@ -300,20 +304,19 @@ qqnorm(messages_distribution$energy_consumed,
 qqline(messages_distribution$energy_consumed)
 
 
-camara_distribution <-  all_energy_data %>%
+camera_distribution <-  all_energy_data %>%
   filter(grepl("camera_on|camera_off", usage_scenario ))  
 
 ggplot(camera_distribution, aes(energy_consumed, color = usage_scenario))+
   geom_density()+
   labs(
-    title = "All camera usage energy consumption",
     subtitle = "energy consumption for all camera usage across measured applications (J)"  
   ) 
 qqnorm(camera_distribution$energy_consumed,
        main = "camera distribution energy Consumption",
        xlab = "Theoretical Quantiles",
        ylab = "Sample Quantiles")
-qqline(camara_distribution$energy_consumed)
+qqline(camera_distribution$energy_consumed)
 
 camera_ON_distribution <-  all_energy_data %>%
   filter(grepl("camera_on", usage_scenario ))  
@@ -321,7 +324,6 @@ camera_ON_distribution <-  all_energy_data %>%
 ggplot(camera_ON_distribution, aes(energy_consumed, color = usage_scenario))+
   geom_density()+
   labs(
-    title = "All camera ON usage energy consumption",
     subtitle = "energy consumption for all camera usage across measured applications (J)"  
   ) 
 qqnorm(camera_ON_distribution$energy_consumed,
@@ -330,13 +332,12 @@ qqnorm(camera_ON_distribution$energy_consumed,
        ylab = "Sample Quantiles")
 qqline(camera_ON_distribution$energy_consumed)
 
-camara_OFF_distribution <-  all_energy_data %>%
-  filter(grepl("camara_off", usage_scenario ))  
+camera_OFF_distribution <-  all_energy_data %>%
+  filter(grepl("camera_off", usage_scenario ))  
 
 ggplot(camera_OFF_distribution, aes(energy_consumed, color = usage_scenario))+
   geom_density()+
   labs(
-    title = "All camera OFF usage energy consumption",
     subtitle = "energy consumption for all camera usage across measured applications (J)"  
   ) 
 qqnorm(camera_OFF_distribution$energy_consumed,
@@ -346,15 +347,19 @@ qqnorm(camera_OFF_distribution$energy_consumed,
 qqline(camera_OFF_distribution$energy_consumed)
 
 
-# normality test with shapiro test to confirm if data  to check if energy consumption data is normally distributed
+###############confirmation of normality test with shapiro test########################
+
+# normality test with shapiro test to check if energy consumption data is normally distributed
+#value of the Shapiro-Wilk Test greater than 0.05, the data is normal. 
+#If it is below 0.05, the data significantly deviate from a normal distribution.
 
 camera_on_data <- consumption_statistics %>%
-  filter(grepl("camara_on", usage_scenario))
+  filter(grepl("camera_on", usage_scenario))
 shapiro_cam_on_result <- shapiro.test(camera_on_data$Total_usage)
 view(shapiro_cam_on_result)
 
 camera_off_data <- consumption_statistics %>%
-  filter(grepl("camara_off", usage_scenario))
+  filter(grepl("camera_off", usage_scenario))
 shapiro_cam_off_result <- shapiro.test(camera_off_data$Total_usage)
 view(shapiro_cam_off_result)
 
@@ -379,6 +384,8 @@ shapiro_message_result <- shapiro.test(message_data$Total_usage)
 view(shapiro_message_result)
 
 
+####################################
+##################################### REALATIONSHIP between usage scenario#########################
 #visualising relationship between usage scenario and energy consumed
 ggplot(all_energy_data, aes(usage_scenario, energy_consumed)) +
   geom_boxplot()+
@@ -404,44 +411,119 @@ group_bar <- ggplot(group_bar_plot, aes(x = usage_scenario, y = Total_usage, fil
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ggsave("group_barplot.png", group_bar, width = 6, height = 8, units = "in")
 
-
 # testing hypothesis for sending messages in Foss and commerical software (foss_massage vs commercial_message)
 messages_hyp <- all_energy_data %>%
   select(usage_scenario, energy_consumed) %>% 
   filter(grepl("zoom_message|skype_message|element_message|rocket_message", usage_scenario)) %>% 
   arrange(usage_scenario)
-view(messages_hyp)
+#view(messages_hyp)
 
-msg_hyp <- kruskal.test(energy_consumed ~ usage_scenario, data = messages_hyp)
-view(msg_hyp)
+# Creating a new grouping variable
+msg_hyp <- messages_hyp %>%
+  mutate(msg_Group = case_when(
+    grepl("zoom_message|skype_message", usage_scenario) ~ "msg_ZoomSkype",
+    grepl("element_message|rocket_message", usage_scenario) ~ "msg_ElementRocket"
+  )
+  )
+#view(msg_hyp)
 
-effsize_msg <- messages_hyp %>% 
-  kruskal_effsize(energy_consumed ~ usage_scenario)
-view(effsize_msg)
+# Perform Welch's t-test
+welch_t_test_result <- t.test(
+  energy_consumed ~ msg_Group, 
+  data = msg_hyp,
+  var.equal = FALSE
+)
+view(welch_t_test_result)
 
-# p_value = 1.212059e-06,
-#low p-value indicates that the observed differences in medians among groups are
-#statistically significant. In other words, it suggests that there is a significant difference 
-#between the groups being compared.there are significance difference when sending 
-#messages between FOSS and commercial collaborative software.
+# Extract means and standard deviations
+mean_zoomSKype <- mean(
+  msg_hyp$energy_consumed
+  [
+    msg_hyp$msg_Group == "msg_ZoomSkype"
+  ]
+)
+mean_elementRocket <- mean(
+  msg_hyp$energy_consumed
+  [
+    msg_hyp$msg_Group == "msg_ElementRocket"
+  ]
+)
 
+sd_ZoomSkype <- sd(
+  msg_hyp$energy_consumed
+  [
+    msg_hyp$msg_Group == "msg_ZoomSkype"
+  ]
+)
+sd_ElementRocket <- sd(
+  msg_hyp$energy_consumed
+  [
+    msg_hyp$msg_Group == "msg_ElementRocket"
+  ]
+)
+
+# Calculating Cohen's d to asess effect size estimation
+pooled_sd <- sqrt((sd_ZoomSkype^2 + sd_ElementRocket^2) / 2)
+cohen_d <- (mean_zoomSKype - mean_elementRocket) / pooled_sd
+
+view(cohen_d)
 
 # testing hypothesis for sending images in Foss and commerical software (foss_massage vs commercial_message)
 images_hyp <- all_energy_data %>%
   select(usage_scenario, energy_consumed) %>% 
   filter(grepl("zoom_image|skype_image|element_image|rocket_image", usage_scenario)) %>% 
   arrange(usage_scenario)
-view(images_hyp)
+#view(images_hyp)
 
-img_hyp <- kruskal.test(energy_consumed ~ usage_scenario, data = images_hyp)
-view(img_hyp)
+# Creating a new grouping variable
+images_hyp <- images_hyp %>%
+  mutate(img_Group = case_when(
+    grepl("zoom_image|skype_image", usage_scenario) ~ "img_ZoomSkype",
+    grepl("element_image|rocket_image", usage_scenario) ~ "img_ElementRocket"
+  )
+  )
+#view(images_hyp)
 
-effsize_img <- images_hyp %>% 
-  kruskal_effsize(energy_consumed ~ usage_scenario)
-view(effsize_img)
+# Performing Welch's t-test
+welch_t_test_result <- t.test(
+  energy_consumed ~ img_Group, 
+  data = images_hyp,
+  var.equal = FALSE
+)
+view(welch_t_test_result)
 
-# p_value = 0.000129871, strong signficance difference when sending 
-#messages between FOSS and commercial collaborative software, we reject the null hypothesis
+# Extract means and standard deviations
+mean_img_zoomSKype <- mean(
+  images_hyp$energy_consumed
+  [
+    images_hyp$img_Group == "img_ZoomSkype"
+  ]
+)
+
+mean_img_elementRocket <- mean(
+  images_hyp$energy_consumed
+  [
+    images_hyp$img_Group == "img_ElementRocket"
+  ]
+)
+
+sd_img_ZoomSkype <- sd(
+  images_hyp$energy_consumed
+  [
+    images_hyp$img_Group == "img_ZoomSkype"
+  ]
+)
+sd_img_ElementRocket <- sd(
+  images_hyp$energy_consumed
+  [
+    images_hyp$img_Group == "img_ElementRocket"
+  ]
+)
+
+img_pooled_sd <- sqrt((sd_img_ZoomSkype^2 + sd_img_ElementRocket^2) / 2)
+img_cohen_d <- (mean_img_zoomSKype - mean_img_elementRocket) / img_pooled_sd
+
+view(img_cohen_d)
 
 
 # testing hypothesis for sending ZIP  in FOSS/commerical collaborative software (zip)
@@ -449,141 +531,297 @@ zip <- all_energy_data %>%
   select(usage_scenario, energy_consumed) %>% 
   filter(grepl("element_zip|zoom_zip|rocket_zip|skype_zip", usage_scenario)) %>% 
   arrange(usage_scenario)
-view(zip)
+#view(zip)
 
-Zip_hyp <- kruskal.test(energy_consumed ~ usage_scenario, data = zip)
-view(Zip_hyp)
+# Creating a new grouping variable
+zip <- zip %>%
+  mutate(zip_Group = case_when(
+    grepl("zoom_zip|skype_zip", usage_scenario) ~ "zip_ZoomSkype",
+    grepl("element_zip|rocket_zip", usage_scenario) ~ "zip_ElementRocket"
+  )
+  )
+#view(zip)
 
-effsize_zip <- zip %>% 
-  kruskal_effsize(energy_consumed ~ usage_scenario)
-view(effsize_zip)
-# p_value = 2.060983e-08, significance difference exist, reject null hypothesis
+# Performing Welch's t-test
+welch_t_test_result <- t.test(
+  energy_consumed ~ zip_Group, 
+  data = zip,
+  var.equal = FALSE
+)
+view(welch_t_test_result)
 
+# Extract means and standard deviations
+mean_zip_zoomSKype <- mean(
+  zip$energy_consumed
+  [
+    zip$zip_Group == "zip_ZoomSkype"
+  ]
+)
+
+mean_zip_elementRocket <- mean(
+  zip$energy_consumed
+  [
+    zip$zip_Group == "zip_ElementRocket"
+  ]
+)
+
+sd_zip_ZoomSkype <- sd(
+  zip$energy_consumed
+  [
+    zip$zip_Group == "zip_ZoomSkype"
+  ]
+)
+sd_zip_ElementRocket <- sd(
+  zip$energy_consumed
+  [
+    zip$zip_Group == "zip_ElementRocket"
+  ]
+)
+
+zip_pooled_sd <- sqrt((sd_zip_ZoomSkype^2 + sd_zip_ElementRocket^2) / 2)
+zip_cohen_d <- (mean_zip_zoomSKype - mean_zip_elementRocket) / zip_pooled_sd
+
+view(zip_cohen_d)
 
 # testing hypothesis for sending PDF in FOSS and commerical collaborative software applications
 pdf <- all_energy_data %>%
   select(usage_scenario, energy_consumed) %>% 
   filter(grepl("zoom_pdf|skype_pdf|element_pdf|rocket_pdf", usage_scenario)) %>% 
   arrange(usage_scenario)
-view(pdf)
+#view(pdf)
 
-pdf_hyp <- kruskal.test(energy_consumed ~ usage_scenario, data = pdf)
-view(pdf_hyp)
+# Create a new grouping variable
+pdf <- pdf %>%
+  mutate(pdf_Group = case_when(
+    grepl("zoom_pdf|skype_pdf", usage_scenario) ~ "pdf_ZoomSkype",
+    grepl("element_pdf|rocket_pdf", usage_scenario) ~ "pdf_ElementRocket"
+  )
+  )
+#view(pdf)
 
-effsize_pdf <- pdf %>% 
-  kruskal_effsize(energy_consumed ~ usage_scenario)
-view(effsize_pdf)
-#p_value = 1.174364e-09, reject null hypothesis
+# Performing Welch's t-test
+welch_t_test_result <- t.test(
+  energy_consumed ~ pdf_Group, 
+  data = pdf,
+  var.equal = FALSE
+)
+(welch_t_test_result)
+
+# Extract means and standard deviations
+mean_pdf_zoomSKype <- mean(
+  pdf$energy_consumed
+  [
+    pdf$pdf_Group == "pdf_ZoomSkype"
+  ]
+)
+
+mean_pdf_elementRocket <- mean(
+  pdf$energy_consumed
+  [
+    pdf$pdf_Group == "pdf_ElementRocket"
+  ]
+)
+
+sd_pdf_ZoomSkype <- sd(
+  pdf$energy_consumed
+  [
+    pdf$pdf_Group == "pdf_ZoomSkype"
+  ]
+)
+sd_pdf_ElementRocket <- sd(
+  pdf$energy_consumed
+  [
+    pdf$pdf_Group == "pdf_ElementRocket"
+  ]
+)
+
+pdf_pooled_sd <- sqrt((sd_pdf_ZoomSkype^2 + sd_pdf_ElementRocket^2) / 2)
+pdf_cohen_d <- (mean_pdf_zoomSKype - mean_pdf_elementRocket) / pdf_pooled_sd
 
 
-#testing hypothesis for sending ZIP and PDF in FOSS collaborative software (pdf vs zip FOSS)
-F_pdf <- all_energy_data %>%
+view(pdf_cohen_d)
+
+# testing hypothesis for sending PDF vs ZIP in FOSS and commerical collaborative software applications
+zip_pdf <- all_energy_data %>%
   select(usage_scenario, energy_consumed) %>% 
-  filter(grepl("rocket_zip|rocket_pdf|element_pdf|element_zip", usage_scenario)) %>% 
+  filter(grepl("pdf|zip", usage_scenario)) %>% 
   arrange(usage_scenario)
-view(F_pdf)
+#view(pdf)
 
-foss_zip_pdf_hyp <- kruskal.test(energy_consumed ~ usage_scenario, data = F_pdf)
-view(foss_zip_pdf_hyp)
+# Create a new grouping variable
+zip_pdf <- zip_pdf %>%
+  mutate(zip_pdf_Group = case_when(
+    grepl("zip", usage_scenario) ~ "zip",
+    grepl("pdf", usage_scenario) ~ "pdf"
+  )
+  )
+#view(zip_pdf)
 
-effsize_foss_pdf <- F_pdf %>% 
-  kruskal_effsize(energy_consumed ~ usage_scenario)
-view(effsize_foss_pdf)
+# Performing Welch's t-test
+welch_t_test_result <- t.test(
+  energy_consumed ~ zip_pdf_Group, 
+  data = zip_pdf,
+  var.equal = FALSE
+)
+view(welch_t_test_result)
 
-#p_value = 0.003072862, less than threshold, reject null hypothesis
+# Extract means and standard deviations
+mean_zip <- mean(
+  zip_pdf$energy_consumed
+  [
+    zip_pdf$zip_pdf_Group == "zip"
+  ]
+)
+
+mean_pdf <- mean(
+  zip_pdf$energy_consumed
+  [
+    zip_pdf$zip_pdf_Group == "pdf"
+  ]
+)
+
+sd_zip <- sd(
+  zip_pdf$energy_consumed
+  [
+    zip_pdf$zip_pdf_Group == "zip"
+  ]
+)
 
 
-#testing hypothesis for sending ZIP and PDF in commercial collaborative software (pdf vs zip FOSS)
-C_pdf <- all_energy_data %>%
+sd_pdf <- sd(
+  zip_pdf$energy_consumed
+  [
+    zip_pdf$zip_pdf_Group == "pdf"
+  ]
+)
+
+zip_pdf_pooled_sd <- sqrt((sd_zip^2 + sd_pdf^2) / 2)
+zip_pdf_cohen_d <- (mean_zip - mean_pdf) / zip_pdf_pooled_sd
+
+view(zip_pdf_cohen_d)
+
+
+
+# testing hypothesis for sending PDF vs IMG in FOSS and commerical collaborative software applications
+pdf_IMG <- all_energy_data %>%
   select(usage_scenario, energy_consumed) %>% 
-  filter(grepl("zoom_zip|zoom_pdf|skype_pdf|skype_zip", usage_scenario)) %>% 
+  filter(grepl("pdf|image", usage_scenario)) %>% 
   arrange(usage_scenario)
-view(C_pdf)
+#view(pdf)
 
-com_zip_pdf_hyp <- kruskal.test(energy_consumed ~ usage_scenario, data = C_pdf)
-view(com_zip_pdf_hyp)
+# Create a new grouping variable
+pdf_IMG <- pdf_IMG %>%
+  mutate(pdf_img_Group = case_when(
+    grepl("pdf", usage_scenario) ~ "pdf",
+    grepl("image", usage_scenario) ~ "image"
+  )
+  )
+#view(pdf_IMG)
 
-effsize_com_pdf <- C_pdf %>% 
-  kruskal_effsize(energy_consumed ~ usage_scenario)
-view(effsize_com_pdf)
-# p_value = 0.250347, above threshold we accept null hypothesis
+# Performing Welch's t-test
+welch_t_test_result <- t.test(
+  energy_consumed ~ pdf_img_Group, 
+  data = pdf_IMG,
+  var.equal = FALSE
+)
+view(welch_t_test_result)
+
+# Extract means and standard deviations
+mean_Pdf <- mean(
+  pdf_IMG$energy_consumed
+  [
+    pdf_IMG$pdf_img_Group == "pdf"
+  ]
+)
+
+mean_img <- mean(
+  pdf_IMG$energy_consumed
+  [
+    pdf_IMG$pdf_img_Group == "image"
+  ]
+)
+
+sd_Pdf <- sd(
+  pdf_IMG$energy_consumed
+  [
+    pdf_IMG$pdf_img_Group == "pdf"
+  ]
+)
 
 
-#testing hypothesis for camera ON and OFF  in FOSS collaborative software (cam_on vs cam_off FOSS)
-cam_on_off_foss <- all_energy_data %>%
+sd_img <- sd(
+  pdf_IMG$energy_consumed
+  [
+    pdf_IMG$pdf_img_Group == "image"
+  ]
+)
+
+pdf_img_pooled_sd <- sqrt((sd_Pdf^2 + sd_img^2) / 2)
+pdf_img_cohen_d <- (mean_Pdf - mean_img) / pdf_img_pooled_sd
+
+view(pdf_img_cohen_d)
+
+
+#testing hypothesis for camera ON and OFF  in commercial & FOSS collaborative software 
+cam_on_off <- all_energy_data %>%
   select(usage_scenario, energy_consumed) %>% 
-  filter(grepl("element_camera_on|rocket_camera_on|element_camera_off|rocket_camera_off", usage_scenario)) %>% 
+  filter(grepl("camera_on|camera_off", usage_scenario)) %>% 
   arrange(usage_scenario)
-view(cam_on_off_foss)
-
-foss_cam_on_off_hyp <- kruskal.test(energy_consumed ~ usage_scenario, data = cam_on_off_foss)
-view(foss_cam_on_off_hyp)
-
-effsize_all_cam_foss <- cam_on_off_foss %>% 
-  kruskal_effsize(energy_consumed ~ usage_scenario)
-view(effsize_all_cam_foss)
-#p_value = 0.002343648, we reject null hypothesis, significance difference exist
+#view(cam_on_off)
 
 
-#testing hypothesis for camera ON and OFF  in commercial collaborative software (cam_on vs cam_off FOSS)
-cam_on_off_com <- all_energy_data %>%
-  select(usage_scenario, energy_consumed) %>% 
-  filter(grepl("skype_camera_on|zoom_camera_on|skype_camera_off|zoom_camera_off", usage_scenario)) %>% 
-  arrange(usage_scenario)
-view(cam_on_off_com)
 
-com_cam_on_off_hyp <- kruskal.test(energy_consumed ~ usage_scenario, data = cam_on_off_com)
-view(com_cam_on_off_hyp)
+# Create a new grouping variable
+cam_on_off <- cam_on_off %>%
+  mutate(cam_on_off_Group = case_when(
+    grepl("camera_on", usage_scenario) ~ "camera_on",
+    grepl("camera_off", usage_scenario) ~ "camera_off"
+  )
+  )
+#view(pdf_IMG)
 
-effsize_all_cam_comm <- cam_on_off_com %>% 
-  kruskal_effsize(energy_consumed ~ usage_scenario)
-view(effsize_all_cam_comm)
-#p_value = 7.560632e-09, reject null hypothesis
+# Perform Welch's t-test
+welch_t_test_result <- t.test(
+  energy_consumed ~ cam_on_off_Group, 
+  data = cam_on_off,
+  var.equal = FALSE
+)
+view(welch_t_test_result)
+
+# Extract means and standard deviations
+mean_cam_on <- mean(
+  cam_on_off$energy_consumed
+  [
+    cam_on_off$cam_on_off_Group == "camera_on"
+  ]
+)
+
+mean_cam_off <- mean(
+  cam_on_off$energy_consumed
+  [
+    cam_on_off$cam_on_off_Group == "camera_off"
+  ]
+)
+
+sd_cam_on <- sd(
+  cam_on_off$energy_consumed
+  [
+    cam_on_off$cam_on_off_Group == "camera_on"
+  ]
+)
 
 
-#testing hypothesis for camera ON in FOSS and commercial collaborative software 
-cam_on_com_foss <- all_energy_data %>%
-  select(usage_scenario, energy_consumed) %>% 
-  filter(grepl("skype_camera_on|zoom_camera_on|element_camera_on|rocket_camera_on", usage_scenario)) %>% 
-  arrange(usage_scenario)
-view(cam_on_com_foss)
+sd_cam_off <- sd(
+  cam_on_off$energy_consumed
+  [
+    cam_on_off$cam_on_off_Group == "camera_off"
+  ]
+)
 
-com_foss_cam_on_hyp <- kruskal.test(energy_consumed ~ usage_scenario, data = cam_on_com_foss)
-view(com_foss_cam_on_hyp)
+cam_on_off_pooled_sd <- sqrt((sd_cam_on^2 + sd_cam_off^2) / 2)
+cam_on_off_cohen_d <- (mean_cam_on - mean_cam_off) / cam_on_off_pooled_sd
 
-effsize_cam_on_com_foss <- cam_on_com_foss %>% 
-  kruskal_effsize(energy_consumed ~ usage_scenario)
-view(effsize_cam_on_com_foss)
-#p_value = 6.386841e-14, reject null hypothesis
+view(cam_on_off_cohen_d)
 
 
-#testing hypothesis for camera OFF in FOSS and commercial collaborative software 
-cam_off_com_foss <- all_energy_data %>%
-  select(usage_scenario, energy_consumed) %>% 
-  filter(grepl("skype_camera_off|zoom_camera_off|element_camera_off|rocket_camera_off", usage_scenario)) %>% 
-  arrange(usage_scenario)
-view(cam_off_com_foss)
 
-com_foss_cam_off_hyp <- kruskal.test(energy_consumed ~ usage_scenario, data = cam_off_com_foss)
-view(com_foss_cam_off_hyp)
-
-effsize_cam_off_com_foss <- cam_off_com_foss %>% 
-  kruskal_effsize(energy_consumed ~ usage_scenario)
-view(effsize_cam_off_com_foss)
-#p_value = 5.565149e-14, reject null hypothesis
-
-#testing hypothesis for all FOSS and commercial collaborative software application usage scenario(FOSS Vs Commercial) 
-com_foss <- all_energy_data %>%
-  select(usage_scenario, energy_consumed) %>% 
-  filter(grepl("skype|zoom & element|rocket", usage_scenario)) %>% 
-  arrange(usage_scenario)
-view(com_foss)
-
-com_foss_hyp <- kruskal.test(energy_consumed ~ usage_scenario, data = com_foss)
-view(com_foss_hyp)
-
-effsize_com_foss <- com_foss %>% 
-  kruskal_effsize(energy_consumed ~ usage_scenario)
-view(effsize_com_foss)
-
-#p_value = 5.565149e-14, reject null hypothesis
