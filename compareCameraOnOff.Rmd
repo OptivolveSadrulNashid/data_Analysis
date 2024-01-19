@@ -1,0 +1,72 @@
+---
+title: "Compare camera on-off"
+author: "Cindy"
+date: "2024-01-18"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+#libraries
+library(readxl)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(gridExtra)
+```
+
+```{r}
+#open data file
+
+# Specify the path to the XLSX file
+file_path <- "all_energy_consumption.csv"
+
+# Read the XLSX file into a data frame
+energy_data <- read.csv(file_path, colClasses = rep("numeric", 25))
+
+# Print the data frame
+energy_data  # or just 'data' without print() to display it in the R console
+```
+
+```{r}      
+# Create a line graph for zoom_camera_on_total_power vs. zoom_camera_off_total_power
+ggplot(energy_data, aes(x = 1:nrow(energy_data))) +
+  geom_line(aes(y = zoom_camera_on_total_power), color = "blue") +
+  geom_line(aes(y = zoom_camera_off_total_power), color = "red") +
+  xlab("Index") +
+  ylab("Total Power") +
+  ggtitle("Comparison: Zoom Camera On vs. Zoom Camera Off") +
+  theme_minimal()
+```
+
+```{r}       
+# Create a line graph for skype_camera_on_total_power vs. skype_camera_off_total_power
+ggplot(energy_data, aes(x = 1:nrow(energy_data))) +
+  geom_line(aes(y = skype_camera_on_total_power), color = "blue") +
+  geom_line(aes(y = skype_camera_off_total_power), color = "red") +
+  xlab("Index") +
+  ylab("Total Power") +
+  ggtitle("Comparison: Skype Camera On vs. Skype Camera Off") +
+  theme_minimal()
+```
+
+```{r}         
+# Create a line graph for rocket_camera_on_total_power vs. rocket_camera_off_total_power
+ggplot(energy_data, aes(x = 1:nrow(energy_data))) +
+  geom_line(aes(y = rocket_camera_on_total_power), color = "blue") +
+  geom_line(aes(y = rocket_camera_off_total_power), color = "red") +
+  xlab("Index") +
+  ylab("Total Power") +
+  ggtitle("Comparison: Rocket Camera On vs. Rocket Camera Off") +
+  theme_minimal()
+```
+
+```{r}         
+# Create a line graph for element_camera_on_total_power vs. element_camera_off_total_power
+ggplot(energy_data, aes(x = 1:nrow(energy_data))) +
+  geom_line(aes(y = element_camera_on_total_power), color = "blue") +
+  geom_line(aes(y = element_camera_off_total_power), color = "red") +
+  xlab("Index") +
+  ylab("Total Power") +
+  ggtitle("Comparison: Element Camera On vs. Element Camera Off") +
+  theme_minimal()
+```
