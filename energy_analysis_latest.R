@@ -1,12 +1,12 @@
-#library(tidyverse)
-#library(tidyr)
-#library(writexl)
-#library(rstatix)
-#library(car)
-#library(dplyr)
+library(tidyverse)
+library(tidyr)
+library(writexl)
+library(rstatix)
+library(car)
+library(dplyr)
 
 #loading energy_data
-energy_data <- read.csv("all_energy_consumption_Latest1.csv", colClasses = rep("numeric", 25))
+energy_data <- read.csv("all_energy_consumption_latest.csv", colClasses = rep("numeric", 25))
 view(energy_data)
 
 
@@ -438,28 +438,20 @@ view(welch_t_test_result)
 # Extract means and standard deviations
 mean_zoomSKype <- mean(
   msg_hyp$energy_consumed
-  [
-    msg_hyp$msg_Group == "msg_ZoomSkype"
-  ]
+  [msg_hyp$msg_Group == "msg_ZoomSkype"]
 )
 mean_elementRocket <- mean(
   msg_hyp$energy_consumed
-  [
-    msg_hyp$msg_Group == "msg_ElementRocket"
-  ]
+  [msg_hyp$msg_Group == "msg_ElementRocket"]
 )
 
 sd_ZoomSkype <- sd(
   msg_hyp$energy_consumed
-  [
-    msg_hyp$msg_Group == "msg_ZoomSkype"
-  ]
+  [msg_hyp$msg_Group == "msg_ZoomSkype"]
 )
 sd_ElementRocket <- sd(
   msg_hyp$energy_consumed
-  [
-    msg_hyp$msg_Group == "msg_ElementRocket"
-  ]
+  [msg_hyp$msg_Group == "msg_ElementRocket"]
 )
 
 # Calculating Cohen's d to asess effect size estimation
@@ -495,29 +487,21 @@ view(welch_t_test_result)
 # Extract means and standard deviations
 mean_img_zoomSKype <- mean(
   images_hyp$energy_consumed
-  [
-    images_hyp$img_Group == "img_ZoomSkype"
-  ]
+  [images_hyp$img_Group == "img_ZoomSkype"]
 )
 
 mean_img_elementRocket <- mean(
   images_hyp$energy_consumed
-  [
-    images_hyp$img_Group == "img_ElementRocket"
-  ]
+  [images_hyp$img_Group == "img_ElementRocket"]
 )
 
 sd_img_ZoomSkype <- sd(
   images_hyp$energy_consumed
-  [
-    images_hyp$img_Group == "img_ZoomSkype"
-  ]
+  [images_hyp$img_Group == "img_ZoomSkype"]
 )
 sd_img_ElementRocket <- sd(
   images_hyp$energy_consumed
-  [
-    images_hyp$img_Group == "img_ElementRocket"
-  ]
+  [images_hyp$img_Group == "img_ElementRocket"]
 )
 
 img_pooled_sd <- sqrt((sd_img_ZoomSkype^2 + sd_img_ElementRocket^2) / 2)
@@ -668,31 +652,23 @@ view(welch_t_test_result)
 # Extract means and standard deviations
 mean_zip <- mean(
   zip_pdf$energy_consumed
-  [
-    zip_pdf$zip_pdf_Group == "zip"
-  ]
+  [zip_pdf$zip_pdf_Group == "zip"]
 )
 
 mean_pdf <- mean(
   zip_pdf$energy_consumed
-  [
-    zip_pdf$zip_pdf_Group == "pdf"
-  ]
+  [zip_pdf$zip_pdf_Group == "pdf"]
 )
 
 sd_zip <- sd(
   zip_pdf$energy_consumed
-  [
-    zip_pdf$zip_pdf_Group == "zip"
-  ]
+  [zip_pdf$zip_pdf_Group == "zip"]
 )
 
 
 sd_pdf <- sd(
   zip_pdf$energy_consumed
-  [
-    zip_pdf$zip_pdf_Group == "pdf"
-  ]
+  [zip_pdf$zip_pdf_Group == "pdf"]
 )
 
 zip_pdf_pooled_sd <- sqrt((sd_zip^2 + sd_pdf^2) / 2)
@@ -778,7 +754,7 @@ cam_on_off <- cam_on_off %>%
     grepl("camera_off", usage_scenario) ~ "camera_off"
   )
   )
-#view(pdf_IMG)
+#view(cam_on_off)
 
 # Perform Welch's t-test
 welch_t_test_result <- t.test(
@@ -822,6 +798,7 @@ cam_on_off_pooled_sd <- sqrt((sd_cam_on^2 + sd_cam_off^2) / 2)
 cam_on_off_cohen_d <- (mean_cam_on - mean_cam_off) / cam_on_off_pooled_sd
 
 view(cam_on_off_cohen_d)
+
 
 
 
