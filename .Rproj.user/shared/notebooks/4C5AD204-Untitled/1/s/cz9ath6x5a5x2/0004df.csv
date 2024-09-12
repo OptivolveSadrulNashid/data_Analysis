@@ -1,0 +1,4 @@
+"0","qqnorm(camara_ON_distribution$energy_consumed,"
+"0","       main = ""camera distribution energy Consumption"","
+"0","       xlab = ""Theoretical Quantiles"","
+"0","       ylab = ""Sample Quantiles"")"

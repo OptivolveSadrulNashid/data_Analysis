@@ -1,0 +1,106 @@
+---
+title: "GroupBarGraph"
+author: "Cindy"
+date: "2023-10-28"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+#libraries
+library(readxl)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(gridExtra)
+```
+
+```{r}
+#open data file
+
+# Specify the path to the XLSX file
+file_path <- "all_energy_consumption.csv"
+
+# Read the XLSX file into a data frame
+data <- read.csv(file_path, colClasses = rep("numeric", 25))
+
+# Print the data frame
+data  # or just 'data' without print() to display it in the R console
+```
+
+```{r}
+#Scatter plot of message
+# Create the scatter plot
+plot(data$Attempts, data$zoom_message_total_power, xlab = "Attempts", ylab = "Power", main = "Scatter Plot")
+points(data$Attempts, data$skype_message_total_power, col = "red")
+points(data$Attempts, data$element_message_total_power, col = "blue")
+points(data$Attempts, data$rocket_message_total_power, col = "green")
+legend("topright", legend = c("zoom", "skype", "element", "rocket"), col = c("black", "red", "blue", "green"), pch = 1)
+```
+```{r}
+#Scatter plot of message
+# Calculate the average per attempt
+average_per_attempt <- rowMeans(data[, c("zoom_message_total_power", "skype_message_total_power", "element_message_total_power", "rocket_message_total_power")])
+
+# Create the scatter plot
+plot(data$Attempts, data$zoom_message_total_power, xlab = "Attempts", ylab = "Power", main = "Scatter Plot of Message Consumption Across 4 Applications Over Time", pch = 21, bg = "black")
+points(data$Attempts, data$skype_message_total_power, pch = 22, bg = "red")
+points(data$Attempts, data$element_message_total_power, pch = 23, bg = "blue")
+points(data$Attempts, data$rocket_message_total_power, pch = 24, bg = "green")
+#points(data$Attempts, average_per_attempt, pch = 25, bg = "purple")  # Add average per attempt points
+legend("topright", legend = c("zoom", "skype", "element", "rocket"), pch = c(21, 22, 23, 24), col = c("black", "red", "blue", "green"), pt.bg = c("black", "red", "blue", "green"))
+
+# Add a regression line for the average per attempt
+abline(lm(average_per_attempt ~ data$Attempts), col = "black")
+```
+```{r}
+#Scatter plot of image
+# Calculate the average per attempt
+average_per_attempt <- rowMeans(data[, c("zoom_image_total_power", "skype_image_total_power", "element_image_total_power", "rocket_image_total_power")])
+
+# Create the scatter plot
+plot(data$Attempts, data$zoom_image_total_power, xlab = "Attempts", ylab = "Power", main = "Scatter Plot of Energy Consumption for Sending Image Between 4 Applications Over Time", pch = 21, bg = "black")
+points(data$Attempts, data$skype_image_total_power, pch = 22, bg = "red")
+points(data$Attempts, data$element_image_total_power, pch = 23, bg = "blue")
+points(data$Attempts, data$rocket_image_total_power, pch = 24, bg = "green")
+#points(data$Attempts, average_per_attempt, pch = 25, bg = "purple")  # Add average per attempt points
+legend("topright", legend = c("zoom", "skype", "element", "rocket"), pch = c(21, 22, 23, 24), col = c("black", "red", "blue", "green"), pt.bg = c("black", "red", "blue", "green"))
+
+# Add a regression line for the average per attempt
+abline(lm(average_per_attempt ~ data$Attempts), col = "black")
+```
+
+```{r}
+#Scatter plot of zip
+# Calculate the average per attempt
+average_per_attempt <- rowMeans(data[, c("zoom_zip_total_power", "skype_zip_total_power", "element_zip_total_power", "rocket_zip_total_power")])
+
+# Create the scatter plot
+plot(data$Attempts, data$zoom_zip_total_power, xlab = "Attempts", ylab = "Power", main = "Scatter Plot of Energy Consumption for Sending ZIP Between 4 Applications Over Time", pch = 21, bg = "black")
+points(data$Attempts, data$skype_zip_total_power, pch = 22, bg = "red")
+points(data$Attempts, data$element_zip_total_power, pch = 23, bg = "blue")
+points(data$Attempts, data$rocket_zip_total_power, pch = 24, bg = "green")
+#points(data$Attempts, average_per_attempt, pch = 25, bg = "purple")  # Add average per attempt points
+legend("topright", legend = c("zoom", "skype", "element", "rocket"), pch = c(21, 22, 23, 24), col = c("black", "red", "blue", "green"), pt.bg = c("black", "red", "blue", "green"))
+
+# Add a regression line for the average per attempt
+abline(lm(average_per_attempt ~ data$Attempts), col = "black")
+```
+
+```{r}
+#Scatter plot of pdf
+# Calculate the average per attempt
+average_per_attempt <- rowMeans(data[, c("zoom_pdf_total_power", "skype_pdf_total_power", "element_pdf_total_power", "rocket_pdf_total_power")])
+
+# Create the scatter plot
+plot(data$Attempts, data$zoom_pdf_total_power, xlab = "Attempts", ylab = "Power", main = "Scatter Plot of Energy Consumption for Sending PDF Between 4 Applications Over Time", pch = 21, bg = "black")
+points(data$Attempts, data$skype_pdf_total_power, pch = 22, bg = "red")
+points(data$Attempts, data$element_pdf_total_power, pch = 23, bg = "blue")
+points(data$Attempts, data$rocket_pdf_total_power, pch = 24, bg = "green")
+#points(data$Attempts, average_per_attempt, pch = 25, bg = "purple")  # Add average per attempt points
+legend("topright", legend = c("zoom", "skype", "element", "rocket"), pch = c(21, 22, 23, 24), col = c("black", "red", "blue", "green"), pt.bg = c("black", "red", "blue", "green"))
+
+# Add a regression line for the average per attempt
+abline(lm(average_per_attempt ~ data$Attempts), col = "black")
+```
+
+

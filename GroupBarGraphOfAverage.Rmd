@@ -10,9 +10,9 @@ output: html_document
 library(readxl)
 library(dplyr)
 library(tidyr)
+library(ggplot2)
 library(gridExtra)
 ```
-
 
 ```{r}
 #open data file
@@ -49,9 +49,15 @@ library(dplyr)
 # Create a new dataframe with selected columns
 average_data <- data %>% select(application, usage_scenario6, average_usage)
 
+# Create a new dataframe with selected columns, but omitting rocket camera
+#average_data <- data %>%
+#  select(application, usage_scenario6, average_usage) %>%
+#  filter(!(application == "rocket" & usage_scenario6 %in% c("camera_off", "camera_on")))
+
 # Print the new dataframe
 print(average_data)
 ```
+
 ```{r}
 # Save the plot as a PNG file
 library(gridExtra)
@@ -66,8 +72,8 @@ ggsave("average_data.png", table_grob, width = 6, height = 8, units = "in")
 write.csv(average_data, "average_data.csv", row.names = FALSE)
 ```
 
-
 ```{r}
+#BAR GRAPH OF ALL USER SCENARIO AND APPLICATION
 # Load the ggplot2 package
 library(ggplot2)
 
@@ -83,4 +89,29 @@ ggplot(average_data, aes(x = application, y = average_usage, fill = usage_scenar
   theme(legend.position = "top")
 ```
 
+```{r}
+#TABLE FOR ZIP VS IMAGE+PDF
 
+# Filter the data for "zip" and "pdf+image" bars
+# Calculate the sum of "pdf" and "image" values within each application
+data_zip <- average_data[average_data$usage_scenario6 == "zip", c("application", "average_usage")]
+data_pdf_image <- aggregate(average_usage ~ application, data = average_data[average_data$usage_scenario6 %in% c("pdf", "image"), ], FUN = sum)
+data_zip_imagepdf <- merge(data_zip, data_pdf_image, by = "application")
+colnames(data_zip_imagepdf) <- c("application", "zip", "image+pdf")
+
+data_zip_imagepdf
+```
+
+```{r}
+#BAR GRAPH FOR ZIP VS IMAGE+PDF
+
+# Reshape the data to long format
+data_zip_imagepdf <- tidyr::gather(data_zip_imagepdf, key = type, value = value, -application)
+
+# Create the grouped bar plot
+ggplot(data_zip_imagepdf, aes(x = application, y = value, fill = type)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(x = "Application", y = "Average Value") +
+  scale_fill_manual(values = c("zip" = "blue", "image+pdf" = "red")) +
+  theme_minimal()
+```

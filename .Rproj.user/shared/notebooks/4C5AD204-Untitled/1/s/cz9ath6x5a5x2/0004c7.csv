@@ -1,0 +1,4 @@
+"0","qqnorm(zip_distribution$energy_consumed,"
+"0","       main = ""zip distribution energy Consumed"","
+"0","       xlab = ""Theoretical Quantiles"","
+"0","       ylab = ""Sample Quantiles"")"
